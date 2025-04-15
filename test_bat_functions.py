@@ -3,6 +3,7 @@
 import pytest
 from bat_functions import calculate_bat_power
 from bat_functions import signal_strength
+from bat_functions import get_bat_vehicle
 
 @pytest.mark.parametrize("p, expectedPower",[
     (0, 0),
@@ -29,3 +30,32 @@ def test_signal_strength(d, expectedSignal):
     Tests the signal strength for different distances (0km, 5km, 10km, 12km)
     """
     assert signal_strength(d) == expectedSignal
+
+
+@pytest.fixture
+def vehicle_dict():
+    return {
+        'Batmobile': {'speed': 200, 'armor': 80},
+        'Batwing': {'speed': 300, 'armor': 60},
+        'Batcycle': {'speed': 150, 'armor': 50}
+    }
+
+@pytest.mark.parametrize("vehicle",[
+    'Batmobile',
+    'Batwing',
+    'Batcycle'
+])
+
+def test_get_bat_vehicle(vehicle, vehicle_dict):
+    """
+    Tests the validity of the get_bat_vehicle function for known bat vehicle names
+    """
+    assert get_bat_vehicle(vehicle) == vehicle_dict[vehicle]
+
+def test_get_bat_vehicle_uk():
+    """
+    Tests the validity of the get_bat_vehicle function for unknown bat vehicle name
+    """
+    with pytest.raises(ValueError, match=(f"Unknown vehicle: Matiz")):
+        get_bat_vehicle('Matiz')
+
