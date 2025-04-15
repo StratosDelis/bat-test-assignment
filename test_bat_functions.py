@@ -1,9 +1,13 @@
 # test_bat_functions.py
 
 import pytest
+import bat_functions
 from bat_functions import calculate_bat_power
 from bat_functions import signal_strength
 from bat_functions import get_bat_vehicle
+
+"""------------------------------Exercise 1------------------------------"""
+
 
 @pytest.mark.parametrize("p, expectedPower",[
     (0, 0),
@@ -32,6 +36,8 @@ def test_signal_strength(d, expectedSignal):
     assert signal_strength(d) == expectedSignal
 
 
+"""------------------------------Exercise 2------------------------------"""
+
 @pytest.fixture
 def vehicle_dict():
     return {
@@ -59,3 +65,13 @@ def test_get_bat_vehicle_uk():
     with pytest.raises(ValueError, match=(f"Unknown vehicle: Matiz")):
         get_bat_vehicle('Matiz')
 
+
+"""------------------------------Exercise 3------------------------------"""
+
+def test_fetch_joker_info(monkeypatch):
+    def custom_dict():
+        return {'mischief_level': 0, 'location': 'captured'}
+
+    monkeypatch.setattr(bat_functions, 'fetch_joker_info', custom_dict)
+    result = bat_functions.fetch_joker_info()
+    assert result == {'mischief_level': 0, 'location': 'captured'}
